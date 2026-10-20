@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ShowLock</string>
-    <string name="picker_hint">Share photos to ShowLock from your gallery, or pick them here.</string>
-    <string name="pick_photos">Pick photos</string>
+    <string name="picker_hint">Share photos or videos to ShowLock from your gallery, or pick them here.</string>
+    <string name="pick_photos">Pick photos and videos</string>
     <string name="photo_description">Photo %1$d of %2$d</string>
     <string name="lock">Lock on this photo</string>
     <string name="unlock">Unlock</string>

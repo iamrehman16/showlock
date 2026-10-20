@@ -36,7 +36,7 @@ fun PickerScreen(onPhotosPicked: (List<Uri>) -> Unit) {
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
         )
-        Button(onClick = { pickPhotos.launch(PickVisualMediaRequest(PickVisualMedia.ImageOnly)) }) {
+        Button(onClick = { pickPhotos.launch(PickVisualMediaRequest(PickVisualMedia.ImageAndVideo)) }) {
             Text(stringResource(R.string.pick_photos))
         }
     }

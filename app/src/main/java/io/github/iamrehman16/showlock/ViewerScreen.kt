@@ -45,6 +45,7 @@ fun ViewerScreen(
     val pagerState = rememberPagerState(initialPage = initialIndex) { photos.size }
     // Only the settled page can be zoomed, since paging is off while zoomed.
     var currentPageZoomed by remember { mutableStateOf(false) }
+    var scrubbingVideo by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     LaunchedEffect(pagerState.settledPage) {
@@ -64,17 +65,28 @@ fun ViewerScreen(
     Box(Modifier.fillMaxSize().background(Color.Black)) {
         HorizontalPager(
             state = pagerState,
-            userScrollEnabled = !locked && !currentPageZoomed,
+            userScrollEnabled = !locked && !currentPageZoomed && !scrubbingVideo,
             key = { photos[it] },
             modifier = Modifier.fillMaxSize(),
         ) { page ->
-            ZoomableImage(
-                uri = photos[page],
-                contentDescription = stringResource(R.string.photo_description, page + 1, photos.size),
-                onZoomedChange = { zoomed ->
-                    if (page == pagerState.settledPage) currentPageZoomed = zoomed
-                },
-            )
+            val uri = photos[page]
+            val isVideo = remember(uri) { context.contentResolver.getType(uri)?.startsWith("video/") == true }
+            if (isVideo) {
+                VideoPage(
+                    uri = uri,
+                    isCurrentPage = page == pagerState.settledPage,
+                    isPagerScrolling = pagerState.isScrollInProgress,
+                    onScrubbingChange = { scrubbingVideo = it },
+                )
+            } else {
+                ZoomableImage(
+                    uri = uri,
+                    contentDescription = stringResource(R.string.photo_description, page + 1, photos.size),
+                    onZoomedChange = { zoomed ->
+                        if (page == pagerState.settledPage) currentPageZoomed = zoomed
+                    },
+                )
+            }
         }
 
         if (photos.size > 1 && !locked) {

@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.core.content.IntentCompat
 
 /**
- * Returns the photos an intent hands us. Only content:// URIs are kept, because
+ * Returns the photos and videos an intent hands us. Only content:// URIs are kept, because
  * those come with a temporary read grant and need no storage permission.
  */
 fun Intent.incomingPhotos(): List<Uri> {
