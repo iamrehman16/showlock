@@ -11,3 +11,7 @@ captures/
 .vscode/
 *.iml
 .DS_Store
+
+# Official Android skills: reinstall with
+#   android skills add --agent=claude-code --project=. android-cli navigation-event edge-to-edge
+.claude/skills/

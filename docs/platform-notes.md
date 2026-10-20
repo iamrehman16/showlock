@@ -18,3 +18,9 @@ Source: https://developer.android.com/identity/sign-in/biometric-auth
 - "You can't call `setNegativeButtonText()` and `setAllowedAuthenticators(... or DEVICE_CREDENTIAL)` at the same time". The system's PIN fallback replaces the negative button.
 - Before showing the prompt, call `BiometricManager.from(ctx).canAuthenticate(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)`, passing the same authenticators. If no screen lock is set, unlocking is impossible, so don't allow locking in that case.
 - The guide doesn't mention `USE_BIOMETRIC`. The androidx.biometric library declares it in its own manifest. Confirm in the merged manifest at M2.
+
+## Back handling (Flow D)
+Source: the official `navigation-event` skill (`.claude/skills/navigation-event`, Google, updated 2026-10-07)
+
+- On SDK 36+, Compose `BackHandler` / `OnBackPressedCallback` are legacy. The replacement is `NavigationBackHandler` from `androidx.navigationevent`, and `ComponentActivity` already provides a `navigationEventDispatcher`.
+- `androidx.navigationevent` isn't on the dependency list in mvp.md. At M2, check whether `activity-compose` already pulls it in (`./gradlew :app:dependencies`). If not, ask before adding it.
