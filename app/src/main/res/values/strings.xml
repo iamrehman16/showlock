@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">ShowLock</string>
-    <string name="picker_hint">Share photos or videos to ShowLock from your gallery, or pick them here.</string>
+    <string name="picker_hint">Share photos or videos from your gallery, or pick them here. Then lock on one before you hand your phone over.</string>
     <string name="pick_photos">Pick photos and videos</string>
+    <string name="privacy_note">No gallery access. Nothing leaves your phone.</string>
     <string name="photo_description">Photo %1$d of %2$d</string>
     <string name="lock">Lock</string>
     <string name="unlock">Unlock</string>

@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
@@ -123,15 +124,16 @@ fun ViewerScreen(
     }
 }
 
-/** A labelled "Lock" pill while browsing; a small subdued icon while locked, so a guest is not invited to tap it. */
+/** A labelled amber "Lock" pill while browsing; a small subdued icon while locked, so a guest is not invited to tap it. */
 @Composable
 private fun LockButton(locked: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Surface(
         onClick = onClick,
         shape = CircleShape,
-        color = OverlayBackdrop,
-        contentColor = Color.White,
-        modifier = modifier.alpha(if (locked) 0.5f else 1f),
+        // Solid amber stands out on any photo; once locked it shrinks to a dim amber-on-dark icon.
+        color = if (locked) OverlayBackdrop else MaterialTheme.colorScheme.primary,
+        contentColor = if (locked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+        modifier = modifier.alpha(if (locked) 0.6f else 1f),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -144,7 +146,7 @@ private fun LockButton(locked: Boolean, onClick: () -> Unit, modifier: Modifier 
             )
             if (!locked) {
                 Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.lock), style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(R.string.lock), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
             }
         }
     }

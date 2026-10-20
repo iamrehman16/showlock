@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.ShowLock" parent="android:Theme.Material.NoActionBar">
+        <!-- Shown before Compose draws its first frame, so there is no white flash. -->
+        <item name="android:windowBackground">@color/ground</item>
+    </style>
+</resources>

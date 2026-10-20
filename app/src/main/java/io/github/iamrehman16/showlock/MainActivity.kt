@@ -11,11 +11,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -50,7 +48,7 @@ class MainActivity : FragmentActivity() {
         if (savedInstanceState == null) viewModel.showPhotos(intent.incomingPhotos())
 
         setContent {
-            MaterialTheme(colorScheme = darkColorScheme()) {
+            ShowLockTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val photos by viewModel.photos.collectAsStateWithLifecycle()
                     val locked by viewModel.locked.collectAsStateWithLifecycle()

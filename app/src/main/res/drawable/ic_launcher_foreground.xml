@@ -1,0 +1,13 @@
+<!-- A single keyhole. 108dp canvas; the shape stays inside the 66dp safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="@color/accent"
+        android:pathData="M41,44a13,13 0 1 0 26,0a13,13 0 1 0 -26,0z" />
+    <path
+        android:fillColor="@color/accent"
+        android:pathData="M47,50h14l4,28h-22z" />
+</vector>
