@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ShowLock"
+include(":app")
