@@ -4,15 +4,24 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsIgnoringVisibility
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,36 +98,63 @@ fun ViewerScreen(
             }
         }
 
-        if (photos.size > 1 && !locked) {
-            Text(
-                text = "${pagerState.currentPage + 1} / ${photos.size}",
-                color = Color.White,
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .statusBarsPadding()
-                    .padding(top = 12.dp)
-                    .background(Color.Black.copy(alpha = 0.5f), MaterialTheme.shapes.small)
-                    .padding(horizontal = 12.dp, vertical = 4.dp),
-            )
-        }
+        // Overlays stay inside the system bars and camera cutout, and keep their place when the
+        // bars hide on lock.
+        Box(Modifier.fillMaxSize().windowInsetsPadding(stableSafeArea())) {
+            if (photos.size > 1 && !locked) {
+                Text(
+                    text = "${pagerState.currentPage + 1} / ${photos.size}",
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(top = 12.dp)
+                        .background(OverlayBackdrop, MaterialTheme.shapes.small)
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                )
+            }
 
-        IconButton(
-            onClick = if (locked) onUnlockRequest else onLock,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .statusBarsPadding()
-                .padding(8.dp)
-                // Subdued while locked so it does not invite a guest to tap it.
-                .alpha(if (locked) 0.5f else 1f)
-                // Dark backdrop keeps the white icon visible on bright photos.
-                .background(Color.Black.copy(alpha = 0.5f), CircleShape),
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_lock),
-                contentDescription = stringResource(if (locked) R.string.unlock else R.string.lock),
-                tint = Color.White,
+            LockButton(
+                locked = locked,
+                onClick = if (locked) onUnlockRequest else onLock,
+                modifier = Modifier.align(Alignment.TopEnd).padding(8.dp),
             )
         }
     }
 }
+
+/** A labelled "Lock" pill while browsing; a small subdued icon while locked, so a guest is not invited to tap it. */
+@Composable
+private fun LockButton(locked: Boolean, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = OverlayBackdrop,
+        contentColor = Color.White,
+        modifier = modifier.alpha(if (locked) 0.5f else 1f),
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = if (locked) 10.dp else 16.dp, vertical = 10.dp),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_lock),
+                contentDescription = if (locked) stringResource(R.string.unlock) else null,
+                modifier = Modifier.size(20.dp),
+            )
+            if (!locked) {
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.lock), style = MaterialTheme.typography.labelLarge)
+            }
+        }
+    }
+}
+
+/** Dark backdrop that keeps white overlays readable on bright photos. */
+private val OverlayBackdrop = Color.Black.copy(alpha = 0.5f)
+
+/** System bars and display cutout, measured as if the bars were shown, so nothing shifts when they hide. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun stableSafeArea(): WindowInsets =
+    WindowInsets.systemBarsIgnoringVisibility.union(WindowInsets.displayCutout)

@@ -3,7 +3,7 @@
     <string name="picker_hint">Share photos or videos to ShowLock from your gallery, or pick them here.</string>
     <string name="pick_photos">Pick photos and videos</string>
     <string name="photo_description">Photo %1$d of %2$d</string>
-    <string name="lock">Lock on this photo</string>
+    <string name="lock">Lock</string>
     <string name="unlock">Unlock</string>
     <string name="unlock_title">Unlock ShowLock</string>
     <string name="locked">Locked</string>

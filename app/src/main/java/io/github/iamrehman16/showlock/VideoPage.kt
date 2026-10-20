@@ -1,8 +1,10 @@
 package io.github.iamrehman16.showlock
 
 import android.net.Uri
+import android.view.View
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +67,8 @@ fun VideoPage(
     }
 
     AndroidView(
-        modifier = Modifier.fillMaxSize(),
+        // Keeps the seek bar and play button clear of the navigation bar.
+        modifier = Modifier.fillMaxSize().windowInsetsPadding(stableSafeArea()),
         factory = { viewContext ->
             PlayerView(viewContext).apply {
                 setShowRewindButton(false)
@@ -73,6 +76,8 @@ fun VideoPage(
                 setShowPreviousButton(false)
                 setShowNextButton(false)
                 setShowSubtitleButton(false)
+                // Playback speed is out of scope, and the API has no switch for its button.
+                findViewById<View>(androidx.media3.ui.R.id.exo_settings)?.visibility = View.GONE
                 // Paging is disabled while the seek bar is being dragged, so a scrub never changes the page.
                 findViewById<DefaultTimeBar>(androidx.media3.ui.R.id.exo_progress)?.addListener(
                     object : TimeBar.OnScrubListener {
