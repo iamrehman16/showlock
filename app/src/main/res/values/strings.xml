@@ -3,4 +3,12 @@
     <string name="picker_hint">Share photos to ShowLock from your gallery, or pick them here.</string>
     <string name="pick_photos">Pick photos</string>
     <string name="photo_description">Photo %1$d of %2$d</string>
+    <string name="lock">Lock on this photo</string>
+    <string name="unlock">Unlock</string>
+    <string name="unlock_title">Unlock ShowLock</string>
+    <string name="locked">Locked</string>
+    <string name="no_screen_lock">Set a screen lock (PIN, pattern, password or fingerprint) to use the lock.</string>
+    <string name="pinning_hint_title">Screen pinning is off</string>
+    <string name="pinning_hint">The photo is locked inside ShowLock, but Home and Recents still work. For full protection, turn on App pinning in Settings &gt; Security, and also turn on “Ask for PIN before unpinning”.</string>
+    <string name="ok">OK</string>
 </resources>

@@ -9,6 +9,7 @@ Source: https://developer.android.com/work/dpc/dedicated-devices/lock-task-mode
 - Pinning "appears similar ... but the person using the device can exit the mode whenever they want." So pinning only protects against a guest when the user has turned on **"Ask for PIN before unpinning"** in system settings. The one-time hint should mention that setting along with App pinning itself.
 - `stopLockTask()` "only works for the activity that started lock task mode."
 - `ActivityManager.lockTaskModeState`: `LOCK_TASK_MODE_PINNED` means screen pinning, `LOCK_TASK_MODE_LOCKED` means DPC lock task mode, `LOCK_TASK_MODE_NONE` means neither. Read this to find out whether pinning actually started (the user may refuse it, or it may be off in settings).
+- Observed on the test phone (HyperOS 3, 2026-10-20): with "Ask for PIN before unpinning" on, even a programmatic `stopLockTask()` locks the device. So pinning is now once per session (mvp.md §3 item 6). Unlocking keeps the app pinned, and the system's lock only fires when the user leaves the viewer.
 - Still to check at M2: the confirmation dialog behavior and what happens when pinning is disabled in settings. Read these in the `Activity#startLockTask` reference.
 
 ## BiometricPrompt

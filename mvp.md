@@ -22,7 +22,7 @@ When I lend my phone to show a picture, the other person swipes to the next phot
 3. Full-screen viewer: swipe between only the received photos, pinch zoom, double-tap zoom, pan, "2 / 4" indicator.
 4. **Lock** button: freezes the viewer on the current photo. No swiping, no leaving the app.
 5. **Unlock** via `BiometricPrompt` (fingerprint, or device PIN/pattern/password fallback).
-6. Screen pinning (`startLockTask`) started with the lock, stopped on unlock, so Home and Recents are blocked too.
+6. Screen pinning (`startLockTask`), pinned once per session: started by the first lock, kept through unlock and re-lock, stopped only when leaving the viewer. Home and Recents stay blocked the whole time. (Changed 2026-10-20: stopping pinning on every unlock made the system lock the whole phone each time.)
 7. **Video (milestone M2b, after the lock works).** Videos shared or picked alongside photos play in the same pager, with basic play/pause and a seek bar. Same lock rules as photos.
 
 ### Not in the MVP
@@ -32,11 +32,11 @@ Albums, editing, video thumbnails, video fullscreen button, video zoom, delete, 
 
 **Flow A, share:** Gallery → select 1+ photos → Share → ShowLock → viewer opens on the first photo in BROWSING state.
 
-**Flow B, lock:** In BROWSING tap the lock icon → state becomes LOCKED, system bars hidden, screen pinning requested (system shows its own confirmation the first time; that is expected) → pager scrolling disabled.
+**Flow B, lock:** In BROWSING tap the lock icon → state becomes LOCKED, system bars hidden, screen pinning requested if not already pinned (system shows its own confirmation; that is expected) → pager scrolling disabled.
 
-**Flow C, unlock:** In LOCKED tap the small lock icon (top corner, low contrast so it does not invite taps) → BiometricPrompt → on success `stopLockTask()`, state returns to BROWSING.
+**Flow C, unlock:** In LOCKED tap the small lock icon (top corner, low contrast so it does not invite taps) → BiometricPrompt → on success state returns to BROWSING. Pinning stays on, so I can swipe to another photo and lock again without a new pin prompt or the phone's lock screen.
 
-**Flow D, exit:** In BROWSING, Back closes the app normally. In LOCKED, Back is consumed and does nothing except a brief "Locked" hint.
+**Flow D, exit:** In BROWSING, Back ends pinning (`stopLockTask()`) and closes the app; with "Ask for PIN before unpinning" on, the system locks the phone here, once. In LOCKED, Back is consumed and does nothing except a brief "Locked" hint.
 
 ### State rules
 - States: `BROWSING`, `LOCKED`. Held in a `ViewModel` with `SavedStateHandle`: photo URI list, current index, locked flag. Rotation or process recreation must not unlock.
@@ -111,6 +111,8 @@ Done when: sharing a mix of 2 photos and 2 videos shows all four in one pager, t
 - [ ] Press power, wake the screen: still locked.
 - [ ] Press Home while pinned: blocked. Without pinning: lock UI still holds when I return.
 - [ ] Unlock with fingerprint works. Unlock with PIN fallback works. Cancel keeps it locked.
+- [ ] Unlock, swipe to another photo, lock again: no pin prompt and no phone lock screen in between.
+- [ ] Back while browsing and pinned: pinning ends and the app closes.
 - [ ] Sharing again from another app is not possible while locked, and if an intent arrives it does not replace the photos.
 - [ ] Locked + zoom in: panning works and does not reveal other photos.
 - [ ] Manifest contains only `USE_BIOMETRIC` (plus the androidx `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`).
