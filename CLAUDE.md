@@ -29,7 +29,7 @@ Reinstall with `android skills add --agent=claude-code --project=. android-cli n
 - Check the manifest permissions: `aapt2 dump permissions app/build/outputs/apk/debug/app-debug.apk`
 
 ## Hard rules (from mvp.md)
-- The only manifest permission is `USE_BIOMETRIC`. No INTERNET, storage, analytics or crash reporting.
+- The only manifest permissions are `USE_BIOMETRIC` and androidx.core's own signature-level `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` (approved by the user). No INTERNET, storage, analytics or crash reporting.
 - Allowed dependencies: Compose, Coil, androidx.biometric, Media3 (M2b only), plus what the toolchain needs. Ask before adding anything else.
 - Never read the gallery, persist URI grants, or copy photos into app storage.
 - Check screen pinning, lock task and biometric behavior against developer.android.com instead of relying on memory.

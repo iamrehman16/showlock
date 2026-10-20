@@ -54,7 +54,7 @@ Albums, editing, video thumbnails, video fullscreen button, video zoom, delete, 
 - Biometrics: `androidx.biometric`. Authenticators `BIOMETRIC_STRONG or DEVICE_CREDENTIAL`.
 - `minSdk 30` (that authenticator combination is not supported on API 28-29). `compileSdk` and `targetSdk`: latest stable installed via `sdkmanager`.
 - Do not persist URI permissions. The temporary read grant from the share intent lasts for the task, which is all we need. Photos are never copied to app storage.
-- Permissions in the manifest: only `USE_BIOMETRIC`. Anything else needs my approval.
+- Permissions in the manifest: only `USE_BIOMETRIC`, plus `<applicationId>.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`, the signature-level permission androidx.core defines for the app itself (approved 2026-10-20). Anything else needs my approval.
 - Verify Android API behaviour (screen pinning, lock task, biometric flags) against developer.android.com instead of assuming from memory.
 
 ### Suggested layout
@@ -113,7 +113,7 @@ Done when: sharing a mix of 2 photos and 2 videos shows all four in one pager, t
 - [ ] Unlock with fingerprint works. Unlock with PIN fallback works. Cancel keeps it locked.
 - [ ] Sharing again from another app is not possible while locked, and if an intent arrives it does not replace the photos.
 - [ ] Locked + zoom in: panning works and does not reveal other photos.
-- [ ] Manifest contains only `USE_BIOMETRIC`.
+- [ ] Manifest contains only `USE_BIOMETRIC` (plus the androidx `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`).
 
 ## 8b. Manual test checklist (M2b, video)
 
@@ -124,7 +124,7 @@ Done when: sharing a mix of 2 photos and 2 videos shows all four in one pager, t
 - [ ] Locked on a video: play/pause and seek work, swiping and Back do not leave it.
 - [ ] Rotating while a video plays or is locked keeps the state (position may reset, but it must stay locked).
 - [ ] Unlocking from a video works with fingerprint and PIN fallback.
-- [ ] Manifest still contains only `USE_BIOMETRIC`.
+- [ ] Manifest still contains only `USE_BIOMETRIC` (plus the androidx `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`).
 
 ## 9. Rules for Claude Code
 
